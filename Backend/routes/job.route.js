@@ -1,6 +1,8 @@
 import express from "express";
-
 import authenticateToken from "../middleware/isAuthenticated.js";
+import requireRole from "../middleware/requireRole.js";
+import { validate } from "../middleware/validate.js";
+import { postJobSchema, idParamSchema } from "../validators/schemas.js";
 import {
   getAdminJobs,
   getAllJobs,
@@ -10,8 +12,9 @@ import {
 
 const router = express.Router();
 
-router.route("/post").post(authenticateToken, postJob);
-router.route("/get").get(authenticateToken, getAllJobs);
-router.route("/getadminjobs").get(authenticateToken, getAdminJobs);
-router.route("/get/:id").get(authenticateToken, getJobById);
+router.post("/post", authenticateToken, requireRole("Recruiter"), validate(postJobSchema), postJob);
+router.get("/get", getAllJobs);
+router.get("/getadminjobs", authenticateToken, requireRole("Recruiter"), getAdminJobs);
+router.get("/get/:id", validate(idParamSchema, "params"), getJobById);
+
 export default router;

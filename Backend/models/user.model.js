@@ -26,21 +26,7 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-    },
-
-    pancard: {
-      type: String,
-      required: true,
-      unique: true,
-      uppercase: true,
-      trim: true,
-    },
-
-    adharcard: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
+      select: false,
     },
 
     role: {
@@ -51,39 +37,25 @@ const userSchema = new mongoose.Schema(
     },
 
     profile: {
-      bio: {
-        type: String,
-        default: "",
-      },
-
-      skills: [
-        {
-          type: String,
-        },
-      ],
-
-      resume: {
-        type: String, // URL of resume file (optional for future)
-        default: "",
-      },
-
-      resumeOriginalname: {
-        type: String,
-        default: "",
-      },
-
+      bio: { type: String, default: "" },
+      skills: [{ type: String }],
+      resume: { type: String, default: "" },
+      resumeOriginalname: { type: String, default: "" },
       company: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
       },
-
-      profilePhoto: {
-        type: String, // Optional
-        default: "",
-      },
+      profilePhoto: { type: String, default: "" },
     },
   },
   { timestamps: true }
 );
+
+userSchema.set("toJSON", {
+  transform: (_doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
+});
 
 export const User = mongoose.model("User", userSchema);

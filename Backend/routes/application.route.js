@@ -1,5 +1,8 @@
 import express from "express";
 import authenticateToken from "../middleware/isAuthenticated.js";
+import requireRole from "../middleware/requireRole.js";
+import { validate } from "../middleware/validate.js";
+import { applicationStatusSchema, idParamSchema } from "../validators/schemas.js";
 import {
   applyJob,
   getApplicants,
@@ -9,16 +12,31 @@ import {
 
 const router = express.Router();
 
-// Apply for a job (should be POST, not GET)
-router.post("/apply/:id", authenticateToken, applyJob);
+router.post(
+  "/apply/:id",
+  authenticateToken,
+  requireRole("Student"),
+  validate(idParamSchema, "params"),
+  applyJob
+);
 
-// Get all applied jobs of logged-in user
-router.get("/get", authenticateToken, getAppliedJobs);
+router.get("/get", authenticateToken, requireRole("Student"), getAppliedJobs);
 
-// Get all applicants for a specific job
-router.get("/:id/applicants", authenticateToken, getApplicants);
+router.get(
+  "/:id/applicants",
+  authenticateToken,
+  requireRole("Recruiter"),
+  validate(idParamSchema, "params"),
+  getApplicants
+);
 
-// Update application status (POST or PUT both ok)
-router.post("/status/:id/update", authenticateToken, updateStatus);
+router.post(
+  "/status/:id/update",
+  authenticateToken,
+  requireRole("Recruiter"),
+  validate(idParamSchema, "params"),
+  validate(applicationStatusSchema),
+  updateStatus
+);
 
 export default router;

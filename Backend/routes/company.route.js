@@ -1,6 +1,13 @@
 import express from "express";
 import authenticateToken from "../middleware/isAuthenticated.js";
-
+import requireRole from "../middleware/requireRole.js";
+import { validate } from "../middleware/validate.js";
+import { logoUpload } from "../middleware/multer.js";
+import {
+  registerCompanySchema,
+  updateCompanySchema,
+  idParamSchema,
+} from "../validators/schemas.js";
 import {
   getAllCompanies,
   getCompanyById,
@@ -8,17 +15,33 @@ import {
   updateCompany,
 } from "../controllers/company.controller.js";
 
-import { logoUpload } from "../middleware/multer.js"; // 👈 use logoUpload, not resumeUpload
-
 const router = express.Router();
 
-router.post("/register", authenticateToken, registerCompany);
+router.post(
+  "/register",
+  authenticateToken,
+  requireRole("Recruiter"),
+  validate(registerCompanySchema),
+  registerCompany
+);
 
-router.get("/get", authenticateToken, getAllCompanies);
+router.get("/get", authenticateToken, requireRole("Recruiter"), getAllCompanies);
 
-router.get("/get/:id", authenticateToken, getCompanyById);
+router.get(
+  "/get/:id",
+  authenticateToken,
+  validate(idParamSchema, "params"),
+  getCompanyById
+);
 
-// Update company + upload logo
-router.put("/update/:id", authenticateToken, logoUpload, updateCompany);
+router.put(
+  "/update/:id",
+  authenticateToken,
+  requireRole("Recruiter"),
+  logoUpload,
+  validate(idParamSchema, "params"),
+  validate(updateCompanySchema),
+  updateCompany
+);
 
 export default router;
