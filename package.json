@@ -1,0 +1,27 @@
+{
+  "name": "job-portal-master",
+  "version": "1.0.0",
+  "description": "Welcome to the Job Portal project! This project is a job portal application built using the MERN stack (MongoDB, Express, React, Node.js).",
+  "main": "index.js",
+  "scripts": {
+    "backend": "npm run dev --prefix Backend",
+    "frontend": "npm run dev --prefix Frontend",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsaditya5511/JOB-PORTAL-master.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/itsaditya5511/JOB-PORTAL-master/issues"
+  },
+  "homepage": "https://github.com/itsaditya5511/JOB-PORTAL-master#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

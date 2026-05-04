@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Jetro and Agent files
+.jetro/
+.cursor/
+.agents/
+.mcp.json
+.windsurfrules
+AGENT.md
+CLAUDE.md
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Backend specific
+Backend/.env
+Backend/uploads/
+!Backend/uploads/.gitkeep
+
+# Frontend specific
+Frontend/.env
+Frontend/dist/
+Frontend/build/
+
+# OS files
+.DS_Store
+Thumbs.db
